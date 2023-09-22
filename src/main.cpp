@@ -1,4 +1,10 @@
-#include "clock.h"
+#include "types.hpp"
+#include "clock.hpp"
+#include "gpio.hpp"
+#include "uart.hpp"
+
+using namespace types;
+using namespace peripherals;
 
 void init_pll();
 void init_peripheral_clock();
@@ -10,12 +16,16 @@ void SystemInit()
 }
 
 void init_peripheral_clock()
-{    // Enable clock on gpio ports
+{    // Enable clock on gpio ports c and a
     RCC_APB2ENR |= RCC_APB2ENR_IOPCEN;
+    RCC_APB2ENR |= RCC_APB2ENR_IOPAEN;
+
+    // Enable usart2 clock
+    RCC_APB1ENR |= RCC_APB1ENR_USART2EN;
 
     // configure gpio port c as output
-    GPIOC_CRH &= ~GPIOC_CRH_MODE_MSK(13);
-    GPIOC_CRH |= GPIOC_CRH_MODE_OUTPUT(13);
+    GPIOC_CRH &= ~GPIO_CRH_MODE_MSK(13);
+    GPIOC_CRH |= GPIO_CRH_MODE_OUTPUT(13);
 }
 
 void init_pll()
@@ -58,10 +68,19 @@ void init_pll()
 
 int main()
 {
+
+    Uart logger = Uart(9600U,2U,3U);
+
     while(1)
     {
+
+        // play uart
+        char b;
+        logger.receive(b);
+        logger.send(b);
+
         // switch on led
-        GPIOC_ODR |= GPIOC_ODR_PIN(13);
+        GPIO_ODR |= GPIO_ODR_PIN(13);
 
         for (uint32_t i = 0; i < 400000; ++i) 
         {
@@ -69,7 +88,7 @@ int main()
         }
 
         // switch off led
-        GPIOC_ODR &= ~GPIOC_ODR_PIN(13);
+        GPIO_ODR &= ~GPIO_ODR_PIN(13);
 
         for (uint32_t i = 0; i < 100000; ++i) 
         {
