@@ -54,4 +54,34 @@ SECTIONS
         . = ALIGN(4);
         _ebss = .;
     } > RAM
+
+    .preinit_array :
+    {
+        . = ALIGN(4);
+        _spreinit_array = .;
+        KEEP(*(.preinit_array))
+        KEEP(*(.preinit_array*))
+        . = ALIGN(4);
+        _epreinit_array = .;
+    } > FLASH
+
+    .init_array :
+    {
+        . = ALIGN(4);
+        _sinit_array = .;
+        KEEP(*(.init_array))
+        KEEP(*(.init_array*))
+        . = ALIGN(4);
+        _einit_array = .;
+    } > FLASH
+
+    .fini_array :
+    {
+        . = ALIGN(4);
+        _sfini_array = .;
+        KEEP(*(.fini_array))
+        KEEP(*(.fini_array*))
+        . = ALIGN(4);
+        _efini_array = .;
+    } > FLASH
 }

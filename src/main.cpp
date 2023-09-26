@@ -8,11 +8,18 @@ using namespace peripherals;
 
 void init_pll();
 void init_peripheral_clock();
+void init_array();
+
+extern void (*_spreinit_array []) (void) __attribute__((weak));
+extern void (*_sinit_array []) (void) __attribute__((weak));
+extern void (*_epreinit_array []) (void) __attribute__((weak));
+extern void (*_einit_array []) (void) __attribute__((weak));
 
 void SystemInit()
 {
     init_pll();
     init_peripheral_clock();
+    init_array();
 }
 
 void init_peripheral_clock()
@@ -66,10 +73,26 @@ void init_pll()
 
 }
 
+void init_array()
+{
+    uint32_t size;
+    size = &(_einit_array[0]) - &(_sinit_array[0]);
+    for(uint32_t i=0U; i<size; ++i)
+    {
+        _sinit_array[i]();
+    }
+    
+    size = &(_epreinit_array[0]) - &(_spreinit_array[0]);
+    for(uint32_t i=0U; i<size; ++i)
+    {
+        _spreinit_array[i]();
+    }
+}
+
+Uart logger = Uart(9600U,2U,3U);
+
 int main()
 {
-
-    Uart logger = Uart(9600U,2U,3U);
 
     while(1)
     {

@@ -38,6 +38,7 @@ namespace peripherals
 
     void Uart::send(char b)
     {
+        // wait until register is empty
         while (!(USART2_SR & USART_SR_TXE))
         {
         };
@@ -46,6 +47,7 @@ namespace peripherals
 
     void Uart::receive(char &b)
     {
+        // wait until register is filled
         while (!(USART2_SR & USART_SR_RXNE))
         {
         };

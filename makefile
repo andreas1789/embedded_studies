@@ -20,7 +20,7 @@ INSTRUCTION_SET = thumb
 CFLAGS = -Os -g -mcpu=$(CPU) -m$(INSTRUCTION_SET)
 
 CXXFLAGS :=$(CFLAGS) -fno-exceptions -fno-rtti 
-CXXFLAGS += -nostdlib -fno-tree-loop-distribute-patterns -fdata-sections -ffunction-sections
+CXXFLAGS += -nostdlib -fno-tree-loop-distribute-patterns -fdata-sections -ffunction-sections -fno-use-cxa-atexit
 CXXFLAGS += -Wall -Wextra -Wundef -Wshadow -Wredundant-decls -Weffc++ -Werror
 
 LDFLAGS	= -T $(LDFILE)
