@@ -22,8 +22,8 @@ namespace peripherals
         GPIOA_CRL |= GPIO_CRL_CNF_FLOAT_INPUT(3);
 
         // Select baudrate
-        uint32_t SystemCoreClock = 72000000U;
-        uint16_t uartdiv = SystemCoreClock / _baudrate;
+        uint32_t PCLK1 = 36000000; // SystemCoreClock /2
+        uint16_t uartdiv = PCLK1 / _baudrate;
 
         USART2_BRR = (((uartdiv / 16) << USART_BRR_DIV_Mantissa_Pos) |
                       ((uartdiv % 16) << USART_BRR_DIV_Fraction_Pos));
