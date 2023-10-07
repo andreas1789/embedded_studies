@@ -1,9 +1,10 @@
 #include "uart.hpp"
+#include "clock.hpp"
 
 namespace peripherals
 {
 
-    Uart::Uart(uint16_t baudrate,
+    Uart::Uart(uint32_t baudrate,
                uint8_t pinTx,
                uint8_t pinRx) : _baudrate(baudrate),
                                 _pinTx(pinTx),
@@ -11,18 +12,17 @@ namespace peripherals
     {
         // Enable clocks - already in clock init
         // Enable usart on gpio a
-        GPIOA_CRL &= ~GPIO_CRL_MODE_MSK(2);
-        GPIOA_CRL &= ~GPIO_CRL_MODE_MSK(3);
-        GPIOA_CRL |= GPIO_CRL_MODE_OUTPUT(2);
-        GPIOA_CRL |= GPIO_CRL_MODE_INPUT(3);
+        GPIOA_CRL &= ~GPIO_CRL_MODE_MSK(pinTx);
+        GPIOA_CRL &= ~GPIO_CRL_MODE_MSK(pinRx);
+        GPIOA_CRL |= GPIO_CRL_MODE_OUTPUT(pinTx);
+        GPIOA_CRL |= GPIO_CRL_MODE_INPUT(pinRx);
 
-        GPIOA_CRL &= ~GPIO_CRL_CNF_MSK(2);
-        GPIOA_CRL &= ~GPIO_CRL_CNF_MSK(3);
-        GPIOA_CRL |= GPIO_CRL_CNF_ALT_PUSH_PULL(2);
-        GPIOA_CRL |= GPIO_CRL_CNF_FLOAT_INPUT(3);
+        GPIOA_CRL &= ~GPIO_CRL_CNF_MSK(pinTx);
+        GPIOA_CRL &= ~GPIO_CRL_CNF_MSK(pinRx);
+        GPIOA_CRL |= GPIO_CRL_CNF_ALT_PUSH_PULL(pinTx);
+        GPIOA_CRL |= GPIO_CRL_CNF_FLOAT_INPUT(pinRx);
 
         // Select baudrate
-        uint32_t PCLK1 = 36000000; // SystemCoreClock /2
         uint16_t uartdiv = PCLK1 / _baudrate;
 
         USART2_BRR = (((uartdiv / 16) << USART_BRR_DIV_Mantissa_Pos) |

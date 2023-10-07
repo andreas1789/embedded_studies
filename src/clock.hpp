@@ -1,6 +1,8 @@
 #include "types.hpp"
 
-
+using namespace types;
+namespace bios
+{
 // Reset Clock Control - RCC
 #define RCC_BASE 0x40021000
 
@@ -36,3 +38,8 @@
 
 #define FLASH_ACR (*(volatile uint32_t *)(FLASH_ACR_BASE + 0x0))
 #define FLASH_ACR_LATENCY_TWO 0x2
+
+
+// System constants
+#define PCLK1 36000000 // SystemCoreClock /2
+}

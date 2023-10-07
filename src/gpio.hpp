@@ -1,6 +1,7 @@
 #include "types.hpp"
 
-
+namespace bsp
+{
 // General Purpose I/O - GPIOx
 #define GPIOA_BASE 0x40010800
 #define GPIOC_BASE 0x40011000 
@@ -28,3 +29,4 @@
 
 #define GPIO_ODR (*(volatile uint32_t *)(GPIOC_BASE + 0xC))
 #define GPIO_ODR_PIN(x) (0x1 << x)
+}

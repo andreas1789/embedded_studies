@@ -6,9 +6,10 @@
 using namespace types;
 using namespace peripherals;
 
-void init_pll();
-void init_peripheral_clock();
+void init_core_clocks();
+void init_peripheral_clocks();
 void init_array();
+void init_hw();
 
 extern void (*_spreinit_array []) (void) __attribute__((weak));
 extern void (*_sinit_array []) (void) __attribute__((weak));
@@ -17,12 +18,12 @@ extern void (*_einit_array []) (void) __attribute__((weak));
 
 void SystemInit()
 {
-    init_pll();
-    init_peripheral_clock();
+    init_core_clocks();
+    init_peripheral_clocks();
     init_array();
 }
 
-void init_peripheral_clock()
+void init_peripheral_clocks()
 {    // Enable clock on gpio ports c and a
     RCC_APB2ENR |= RCC_APB2ENR_IOPCEN;
     RCC_APB2ENR |= RCC_APB2ENR_IOPAEN;
@@ -35,7 +36,7 @@ void init_peripheral_clock()
     GPIOC_CRH |= GPIO_CRH_MODE_OUTPUT(13);
 }
 
-void init_pll()
+void init_core_clocks()
 {
     // Set Flash wait state
     FLASH_ACR |= FLASH_ACR_LATENCY_TWO;
@@ -89,10 +90,17 @@ void init_array()
     }
 }
 
-Uart logger = Uart(9600U,2U,3U);
+void init_hw()
+{
+
+}
+
+Uart logger = Uart(115200U,2U,3U);
 
 int main()
 {
+
+    init_hw();
 
     while(1)
     {

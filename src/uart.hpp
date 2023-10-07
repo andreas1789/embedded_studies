@@ -26,12 +26,12 @@ namespace peripherals
     class Uart
     {
     private:
-        uint16_t _baudrate;
+        uint32_t _baudrate;
         uint8_t _pinTx;
         uint8_t _pinRx;
         char rxb = '\0';
     public:
-        Uart(uint16_t baudrate, uint8_t pinTx, uint8_t pinRx);
+        Uart(uint32_t baudrate, uint8_t pinTx, uint8_t pinRx);
         ~Uart();
         void send(char b);
         void receive(char& b);
