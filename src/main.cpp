@@ -1,10 +1,11 @@
 #include "types.hpp"
 #include "clock.hpp"
 #include "gpio.hpp"
-#include "uart.hpp"
+#include "uartConsole.hpp"
 
 using namespace types;
 using namespace peripherals;
+using namespace services;
 
 void init_core_clocks();
 void init_peripheral_clocks();
@@ -92,10 +93,12 @@ void init_array()
 
 void init_hw()
 {
-
+    // Setup I/O
+    // Setup ADC
+    // Setup DMA
 }
 
-Uart logger = Uart(115200U,2U,3U);
+UartConsole logger = UartConsole(115200U,2U,3U);
 
 int main()
 {
@@ -106,14 +109,16 @@ int main()
     {
 
         // play uart
-        char b;
-        logger.receive(b);
-        logger.send(b);
+        //char b;
+        //logger.receiveByte(b);
+        //logger.sendByte('b');
+        char buf[] = "\r\nHello World!";
+        logger.send(buf, sizeof(buf));
 
         // switch on led
         GPIO_ODR |= GPIO_ODR_PIN(13);
 
-        for (uint32_t i = 0; i < 400000; ++i) 
+        for (uint32_t i = 0; i < 4000000; ++i) 
         {
             __asm__ volatile("nop");
         }
@@ -121,7 +126,7 @@ int main()
         // switch off led
         GPIO_ODR &= ~GPIO_ODR_PIN(13);
 
-        for (uint32_t i = 0; i < 100000; ++i) 
+        for (uint32_t i = 0; i < 1000000; ++i) 
         {
             __asm__ volatile("nop");
         }

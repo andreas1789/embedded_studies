@@ -33,8 +33,8 @@ namespace peripherals
     public:
         Uart(uint32_t baudrate, uint8_t pinTx, uint8_t pinRx);
         ~Uart();
-        void send(char b);
-        void receive(char& b);
+        void sendByte(char b);
+        void receiveByte(char& b);
     };
 
 }
