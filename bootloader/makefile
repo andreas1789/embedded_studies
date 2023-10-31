@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-TARGET = stm32f103c8t6
+TARGET = stm32f103c8t6_btld
 
-BUILD_DIR = gen
+BUILD_DIR = ../gen_btld
 
 CPPSOURCES = $(wildcard src/*.cpp)
 HEADERS = include/

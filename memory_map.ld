@@ -1,0 +1,12 @@
+/*
+* linker script for stm32f103c8t6
+*/
+
+MEMORY
+{
+    RAM (xrw) : ORIGIN = 0x20000800, LENGTH = 18K
+    FLASH (xr) : ORIGIN = 0x08002000, LENGTH = 56K
+    BOOT_RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 2K
+    BOOT_FLASH (xr) : ORIGIN = 0x08000000, LENGTH = 8K
+}
+
