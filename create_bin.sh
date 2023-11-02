@@ -12,6 +12,8 @@ cd ../application
 make clean
 make
 
+cd ..
+
 # Define the start address of the application flash region
 bootloader_flash_start=0x08000000
 application_flash_start=0x08002000
