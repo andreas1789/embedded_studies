@@ -1,5 +1,17 @@
 #!/bin/bash
 
+rm combined.bin
+
+# Make bootloader
+cd bootloader
+make clean
+make
+
+# Make application
+cd ../application
+make clean
+make
+
 # Define the start address of the application flash region
 bootloader_flash_start=0x08000000
 application_flash_start=0x08002000
