@@ -1,6 +1,6 @@
-#include "../../application/include/types.hpp"
-#include "../../application//include/clock.hpp"
-#include "../../application//include/gpio.hpp"
+#include "../../base/include/types.hpp"
+#include "../../base/include/clock.hpp"
+#include "../../base/include/gpio.hpp"
 
 using namespace types;
 

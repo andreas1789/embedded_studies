@@ -1,7 +1,7 @@
-#include "types.hpp"
-#include "clock.hpp"
-#include "gpio.hpp"
-#include "uartConsole.hpp"
+#include "../../base/include/types.hpp"
+#include "../../base/include/clock.hpp"
+#include "../../base/include/gpio.hpp"
+#include "../../base/include/uartConsole.hpp"
 
 using namespace types;
 using namespace peripherals;

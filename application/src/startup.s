@@ -11,12 +11,17 @@
 .word _sdata    // data section in ram where initialized data is stored
 .word _edata
 .word _sidata   // initialized data in flash
+.word __FLASH_START__
+.equ _vtor, 0xE000ED08
 
 // Reset Handler
 .section .text.Reset
 .type Reset, %function
 
 Reset:
+    ldr r0, =_vtor // VTOR register
+    ldr r1, =__FLASH_START__ // address of vector table of application
+    str r1, [r0] 
 
     ldr r0, = _sdata
     ldr r1, = _edata
