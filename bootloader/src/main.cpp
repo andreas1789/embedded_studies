@@ -1,8 +1,10 @@
 #include "../../base/include/types.hpp"
 #include "../../base/include/clock.hpp"
 #include "../../base/include/gpio.hpp"
+#include "../../base/include/uartConsole.hpp"
 
 using namespace types;
+
 
 void init_core_clocks();
 void init_peripheral_clocks();
@@ -22,7 +24,11 @@ void SystemInit()
 }
 
 void init_peripheral_clocks()
-{   
+{
+    // Enable clock on gpio ports a
+    RCC_APB2ENR |= RCC_APB2ENR_IOPAEN;
+    // Enable usart2 clock
+    RCC_APB1ENR |= RCC_APB1ENR_USART2EN;
 }
 
 void init_core_clocks()
@@ -91,8 +97,14 @@ static void  __attribute__((naked)) start_application(uint32_t pc, uint32_t sp)
     (void)sp;
 }
 
+::services::UartConsole logger = ::services::UartConsole(115200U,2U,3U);
+
+
 int main()
 {
+    char buf[] = "\r\nEntering main function in Bootloader";
+    logger.send(buf, sizeof(buf));
+
     //(void)start_application;
     uint32_t *app_code = (uint32_t *)0x08002000;
     uint32_t app_sp = app_code[0];
