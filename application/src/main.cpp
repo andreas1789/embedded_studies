@@ -1,7 +1,7 @@
-#include "types.hpp"
-#include "clock.hpp"
-#include "gpio.hpp"
-#include "uartConsole.hpp"
+#include "../../base/include/types.hpp"
+#include "../../base/include/clock.hpp"
+#include "../../base/include/gpio.hpp"
+#include "../../base/include/uartConsole.hpp"
 
 using namespace types;
 using namespace peripherals;
@@ -104,16 +104,13 @@ int main()
 {
 
     init_hw();
+    char buf0[] = "\r\nEntering main function in Application";
+    logger.send(buf0, sizeof(buf0));
 
     while(1)
     {
-
-        // play uart
-        //char b;
-        //logger.receiveByte(b);
-        //logger.sendByte('b');
-        char buf[] = "\r\nHello World!";
-        logger.send(buf, sizeof(buf));
+        char buf1[] = "\r\nTick ";
+        logger.send(buf1, sizeof(buf1));
 
         // switch on led
         GPIO_ODR |= GPIO_ODR_PIN(13);

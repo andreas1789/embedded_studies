@@ -24,6 +24,6 @@ namespace services
 
     void UartConsole::receive(char msg[])
     {
-        
+        msg[0] = '0';
     }
 }

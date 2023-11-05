@@ -1,12 +1,15 @@
 #!/bin/zsh
 
-TARGET = stm32f103c8t6
+TARGET = stm32f103c8t6_btld
 
-BUILD_DIR = gen
+BUILD_DIR = ../gen_btld
 
 CPPSOURCES = $(wildcard src/*.cpp)
+CPPBASESOURCES = $(wildcard ../base/src/*.cpp)
 HEADERS = include/
+BASEHEADERS = ../base/include/
 ASMSOURCES = $(wildcard src/*.s)
+BASEOBJECTS = $(patsubst ../base/src/%.cpp, $(BUILD_DIR)/%.o, $(CPPBASESOURCES))
 OBJECTS = $(patsubst src/%.cpp, $(BUILD_DIR)/%.o, $(CPPSOURCES)) $(patsubst src/%.s, $(BUILD_DIR)/%.o, $(ASMSOURCES))
 LDFILE = $(wildcard src/*.ld)
 
@@ -37,7 +40,7 @@ debug: build
 	@printf "\nflashing the target in debug mode\n"
 	openocd -f config/openocd_debug.cfg
 
-elf: $(OBJECTS)
+elf: $(OBJECTS) $(BASEOBJECTS)
 	@printf "\nlinking the elf file $^\n"
 	$(LD) $(LDFLAGS) -o $(BUILD_DIR)/$(TARGET).elf $^ 
 
@@ -52,6 +55,10 @@ hex:
 $(BUILD_DIR)/%.o:src/%.cpp | $(BUILD_DIR)
 	@printf "\ncompiling $<\n"
 	$(CXX) -c $(CXXFLAGS) -I $(HEADERS) $< -o $@
+
+$(BUILD_DIR)/%.o:../base/src/%.cpp | $(BUILD_DIR)
+	@printf "\ncompiling $<\n"
+	$(CXX) -c $(CXXFLAGS) -I $(BASEHEADERS) $< -o $@
 	
 $(BUILD_DIR)/%.o:src/%.s | $(BUILD_DIR)
 	@printf "\ncompiling $<\n"
