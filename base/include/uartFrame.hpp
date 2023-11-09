@@ -5,6 +5,8 @@ using namespace types;
 
 namespace services
 {
+    #define UART_FRAME_DATA_LENGTH 32
+
     enum TransportFlag_t : uint8_t
     {
         DEF = 0x0,
@@ -26,37 +28,36 @@ namespace services
     typedef struct
     {
         TransportHeader_t header;
-        byte_t data[32];
+        byte_t *data;
 
     } TransportFrame_t;
-    
+
     enum AepState_t : uint8_t
     {
         UNCONNECTED,
         CONNECTED,
     };
 
-    class UartFrameAepAdapter: public ::peripherals::Uart
+    class UartFrameAepAdapter
     {
     public:
-        UartFrameAepAdapter(uint8_t port);
+        UartFrameAepAdapter(uint8_t port, ::peripherals::Uart &iUart);
         ~UartFrameAepAdapter();
 
         Std_ReturnType_t connect();
         Std_ReturnType_t disconnect();
         Std_ReturnType_t send();
         Std_ReturnType_t receive();
-        Std_ReturnType_t writeTxBuf(byte_t txData[32]);
-        Std_ReturnType_t readRxBuf(byte_t rxData[32]);
+        Std_ReturnType_t setTxBuf(byte_t txData[UART_FRAME_DATA_LENGTH]);
+        Std_ReturnType_t setRxBuf(byte_t rxData[UART_FRAME_DATA_LENGTH]);
 
     private:
-        Std_ReturnType_t sendFrame(TransportFrame_t *frame);
-        Std_ReturnType_t receiveFrame(TransportFrame_t *frame);
+        TransportFrame_t txFrame;
+        TransportFrame_t rxFrame;
 
-        byte_t sendBuffer[32];
-        byte_t receiveBuffer[32];
+        ::peripherals::Uart *IUart;
 
-        AepState_t state;
+        AepState_t _state;
     };
 
 }
