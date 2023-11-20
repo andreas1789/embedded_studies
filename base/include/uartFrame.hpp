@@ -41,7 +41,7 @@ namespace services
     class UartFrameAepAdapter
     {
     public:
-        UartFrameAepAdapter(uint8_t port, ::peripherals::Uart &iUart);
+        UartFrameAepAdapter(uint8_t port, ::peripherals::Uart iUart);
         ~UartFrameAepAdapter();
 
         Std_ReturnType_t connect();
@@ -55,9 +55,13 @@ namespace services
         TransportFrame_t txFrame;
         TransportFrame_t rxFrame;
 
-        ::peripherals::Uart *IUart;
+        uint8_t _port;
+        ::peripherals::Uart _IUart;
 
         AepState_t _state;
+        uint32_t _seq;
+        
+       Std_ReturnType_t updateHeader(TransportHeader_t& header); 
     };
 
 }
