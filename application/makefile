@@ -24,7 +24,7 @@ CFLAGS = -Os -g -mcpu=$(CPU) -m$(INSTRUCTION_SET)
 
 CXXFLAGS :=$(CFLAGS) -fno-exceptions -fno-rtti 
 CXXFLAGS += -nostdlib -fno-tree-loop-distribute-patterns -fdata-sections -ffunction-sections -fno-use-cxa-atexit
-CXXFLAGS += -Wall -Wextra -Wundef -Wshadow -Wredundant-decls -Weffc++ -Werror
+CXXFLAGS += -Wall -Wextra -Wundef -Wshadow -Wredundant-decls -Werror
 
 LDFLAGS	= -T $(LDFILE)
 LDFLAGS	+= -Map=$(BUILD_DIR)/$(TARGET).map

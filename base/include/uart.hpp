@@ -1,3 +1,5 @@
+#ifndef F548F8E1_5D9F_4C46_91DE_5C4205AD0530
+#define F548F8E1_5D9F_4C46_91DE_5C4205AD0530
 #include "types.hpp"
 #include "gpio.hpp"
 
@@ -38,3 +40,6 @@ namespace peripherals
     };
 
 }
+
+
+#endif /* F548F8E1_5D9F_4C46_91DE_5C4205AD0530 */

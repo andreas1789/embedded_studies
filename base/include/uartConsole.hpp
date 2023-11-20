@@ -1,3 +1,5 @@
+#ifndef DF567B41_9200_4290_954E_F7444CD325DB
+#define DF567B41_9200_4290_954E_F7444CD325DB
 #include "types.hpp"
 #include "gpio.hpp"
 #include "uart.hpp"
@@ -18,3 +20,6 @@ namespace services
         void receive(char msg[]);
     };
 }
+
+
+#endif /* DF567B41_9200_4290_954E_F7444CD325DB */

@@ -1,3 +1,5 @@
+#ifndef C57F8165_841F_4FF8_9CDD_A6A500747FCE
+#define C57F8165_841F_4FF8_9CDD_A6A500747FCE
 #include "types.hpp"
 
 namespace bsp
@@ -30,3 +32,6 @@ namespace bsp
 #define GPIO_ODR (*(volatile uint32_t *)(GPIOC_BASE + 0xC))
 #define GPIO_ODR_PIN(x) (0x1 << x)
 }
+
+
+#endif /* C57F8165_841F_4FF8_9CDD_A6A500747FCE */

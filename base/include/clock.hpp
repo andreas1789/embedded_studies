@@ -1,3 +1,5 @@
+#ifndef AE1B5660_6C76_4B4D_93F4_58C4A45298A8
+#define AE1B5660_6C76_4B4D_93F4_58C4A45298A8
 #include "types.hpp"
 
 using namespace types;
@@ -43,3 +45,6 @@ namespace bios
 // System constants
 #define PCLK1 36000000 // SystemCoreClock /2
 }
+
+
+#endif /* AE1B5660_6C76_4B4D_93F4_58C4A45298A8 */
