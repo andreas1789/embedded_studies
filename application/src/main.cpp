@@ -98,6 +98,7 @@ void init_hw()
     // Setup DMA
 }
 
+Uart uart = Uart(115200U,2U,3U);
 UartConsole logger = UartConsole(115200U,2U,3U);
 
 int main()
