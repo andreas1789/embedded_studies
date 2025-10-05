@@ -1,6 +1,7 @@
 #include "../../base/include/types.hpp"
 #include "../../base/include/clock.hpp"
 #include "../../base/include/gpio.hpp"
+#include "../../base/include/uart.hpp"
 #include "../../base/include/uartConsole.hpp"
 
 using namespace types;
@@ -97,13 +98,17 @@ static void  __attribute__((naked)) start_application(uint32_t pc, uint32_t sp)
     (void)sp;
 }
 
-::services::UartConsole logger = ::services::UartConsole(115200U,2U,3U);
+::peripherals::Uart uart = ::peripherals::Uart(115200U, 2U, 3U);
+namespace services
+{
+
+    UartConsole logger = UartConsole(uart);
+}
 
 
 int main()
 {
-    char buf[] = "\r\nEntering main function in Bootloader";
-    logger.send(buf, sizeof(buf));
+    services::logger.send("\r\nEntering main function in Bootloader");
 
     //(void)start_application;
     uint32_t *app_code = (uint32_t *)0x08002000;

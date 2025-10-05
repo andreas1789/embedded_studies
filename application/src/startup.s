@@ -91,6 +91,10 @@ isr_vector:
     // .word IRQ0
     // .word IRQ1
     // ...
+    .rept 37
+        .word default_handler
+    .endr
+    .word USART1_Handler
 
     .weak NMI
     .thumb_set NMI, default_handler
@@ -115,4 +119,7 @@ isr_vector:
 
     .weak SysTick
     .thumb_set SysTick, default_handler
+
+    .weak USART1_Handler
+    .thumb_set USART1_Handler, default_handler
 .size isr_vector, .-isr_vector

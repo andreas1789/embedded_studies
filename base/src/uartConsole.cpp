@@ -2,24 +2,16 @@
 
 namespace services
 {
-    UartConsole::UartConsole(uint32_t baudrate, uint8_t pinTx, uint8_t pinRx) : 
-                                Uart(baudrate, pinTx, pinRx)
+    UartConsole::UartConsole(peripherals::Uart &uart) : _uart(uart)
     {
     }
 
-    UartConsole::~UartConsole(){}
+    UartConsole::~UartConsole() {}
 
-    void UartConsole::send(char msg[], uint32_t len)
+    void UartConsole::send(const char *msg)
     {
-        if (len <= 256)
-        {
-            uint32_t cursor  = 0;
-            while (cursor  < len)
-            {
-                sendByte(msg[cursor]);
-                cursor++;
-            }
-        }
+        while (*msg)
+            _uart.sendByte(*msg++);
     }
 
     void UartConsole::receive(char msg[])

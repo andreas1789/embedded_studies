@@ -8,18 +8,19 @@ using namespace types;
 
 namespace services
 {
-    class UartConsole : public ::peripherals::Uart
+    class UartConsole
     {
     private:
         uint8_t bufferRx[256];
+        peripherals::Uart& _uart;
 
     public:
-        UartConsole(uint32_t baudrate, uint8_t pinTx, uint8_t pinRx);
+        UartConsole(peripherals::Uart& uart);
         ~UartConsole();
-        void send(char msg[], uint32_t len);
+        void send(const char *msg);
         void receive(char msg[]);
     };
+    extern UartConsole logger;
 }
-
 
 #endif /* DF567B41_9200_4290_954E_F7444CD325DB */

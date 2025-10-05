@@ -2,6 +2,7 @@
 #include "../../base/include/clock.hpp"
 #include "../../base/include/gpio.hpp"
 #include "../../base/include/uartConsole.hpp"
+#include "../../base/include/uartDiagnosis.hpp"
 
 using namespace types;
 using namespace peripherals;
@@ -12,10 +13,10 @@ void init_peripheral_clocks();
 void init_array();
 void init_hw();
 
-extern void (*_spreinit_array []) (void) __attribute__((weak));
-extern void (*_sinit_array []) (void) __attribute__((weak));
-extern void (*_epreinit_array []) (void) __attribute__((weak));
-extern void (*_einit_array []) (void) __attribute__((weak));
+extern void (*_spreinit_array[])(void) __attribute__((weak));
+extern void (*_sinit_array[])(void) __attribute__((weak));
+extern void (*_epreinit_array[])(void) __attribute__((weak));
+extern void (*_einit_array[])(void) __attribute__((weak));
 
 void SystemInit()
 {
@@ -25,7 +26,7 @@ void SystemInit()
 }
 
 void init_peripheral_clocks()
-{    // Enable clock on gpio ports c and a
+{ // Enable clock on gpio ports c and a
     RCC_APB2ENR |= RCC_APB2ENR_IOPCEN;
     RCC_APB2ENR |= RCC_APB2ENR_IOPAEN;
 
@@ -53,7 +54,8 @@ void init_core_clocks()
     // Activate HSE and set as source for PLL
     RCC_CR |= RCC_CR_HSE_ON;
     while (!(RCC_CR & RCC_CR_HSE_RDY))
-    {}
+    {
+    }
 
     RCC_CFGR &= ~RCC_CFGR_PLLSRC_MSK;
     RCC_CFGR |= RCC_CFGR_PLLSRC_HSE;
@@ -65,27 +67,28 @@ void init_core_clocks()
     // Activate PLL
     RCC_CR |= RCC_CR_PLLON;
     while (!(RCC_CR & RCC_CR_PLLRDY))
-    {}
+    {
+    }
 
     // Set clock to PLL
     RCC_CFGR &= ~RCC_CFGR_SW_MSK;
     RCC_CFGR |= RCC_CFGR_SW_PLL;
     while (!(RCC_CFGR & RCC_CFGR_SWS_PLL))
-    {}
-
+    {
+    }
 }
 
 void init_array()
 {
     uint32_t size;
     size = &(_einit_array[0]) - &(_sinit_array[0]);
-    for(uint32_t i=0U; i<size; ++i)
+    for (uint32_t i = 0U; i < size; ++i)
     {
         _sinit_array[i]();
     }
-    
+
     size = &(_epreinit_array[0]) - &(_spreinit_array[0]);
-    for(uint32_t i=0U; i<size; ++i)
+    for (uint32_t i = 0U; i < size; ++i)
     {
         _spreinit_array[i]();
     }
@@ -98,33 +101,51 @@ void init_hw()
     // Setup DMA
 }
 
-Uart uart = Uart(115200U,2U,3U);
-UartConsole logger = UartConsole(115200U,2U,3U);
+Uart uart = Uart(115200U, 2U, 3U);
+namespace services
+{
+
+    UartConsole logger = UartConsole(uart);
+}
+
+UartDiagnosis diag = UartDiagnosis(uart);
+
+void ledApp();
+void ledApp()
+{
+    // switch on led
+    GPIO_ODR |= GPIO_ODR_PIN(13);
+
+    for (uint32_t i = 0; i < 4000000; ++i)
+    {
+        __asm__ volatile("nop");
+    }
+
+    // switch off led
+    GPIO_ODR &= ~GPIO_ODR_PIN(13);
+
+    for (uint32_t i = 0; i < 1000000; ++i)
+    {
+        __asm__ volatile("nop");
+    }
+}
 
 int main()
 {
 
     init_hw();
-    char buf0[] = "\r\nEntering main function in Application";
-    logger.send(buf0, sizeof(buf0));
 
-    while(1)
+    services::logger.send("\r\nEntering main function in Application");
+
+    while (1)
     {
-        char buf1[] = "\r\nTick ";
-        logger.send(buf1, sizeof(buf1));
+        services::logger.send("\r\nTick ");
 
-        // switch on led
-        GPIO_ODR |= GPIO_ODR_PIN(13);
+        diag.tick();
 
-        for (uint32_t i = 0; i < 4000000; ++i) 
-        {
-            __asm__ volatile("nop");
-        }
+        // ledApp();
 
-        // switch off led
-        GPIO_ODR &= ~GPIO_ODR_PIN(13);
-
-        for (uint32_t i = 0; i < 1000000; ++i) 
+        for (uint32_t i = 0; i < 1000000; ++i)
         {
             __asm__ volatile("nop");
         }

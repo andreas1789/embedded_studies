@@ -13,9 +13,8 @@ namespace services
         UartDiagnosis(::peripherals::Uart uart);
         ~UartDiagnosis();
 
-        void registerService(uint8_t sId, void (*callback)());
-        uint8_t receiveSId();
-        void processService();
+        void registerService(uint8_t id, void (*callback)());
+        void tick();
 
     private:
         static constexpr uint8_t MAX_SERVICES = 10; // adjust if needed
@@ -23,11 +22,11 @@ namespace services
         uint8_t _sIds[MAX_SERVICES];
         uint8_t _numServices;
 
+        void _runCommand(uint8_t id, uint8_t* payload, uint8_t len);
+
         ::peripherals::Uart& _uart;
 
-        List<uint8_t, 5> _serviceQueue;
-
-        uint8_t _isValid(uint8_t sId);
+        void _feedByte(uint8_t b);
     };
 }
 

@@ -8,22 +8,22 @@ using namespace types;
 namespace peripherals
 {
 
-    #define USART2_BASE 0x40004400
-    #define USART2_BRR (*(volatile uint32_t *)(USART2_BASE + 0x8))
-    #define USART2_CR1 (*(volatile uint32_t *)(USART2_BASE + 0xC))
-    #define USART2_SR (*(volatile uint32_t *)(USART2_BASE + 0x0))
-    #define USART2_DR (*(volatile uint32_t *)(USART2_BASE + 0x4))
+#define USART2_BASE 0x40004400
+#define USART2_BRR (*(volatile uint32_t *)(USART2_BASE + 0x8))
+#define USART2_CR1 (*(volatile uint32_t *)(USART2_BASE + 0xC))
+#define USART2_SR (*(volatile uint32_t *)(USART2_BASE + 0x0))
+#define USART2_DR (*(volatile uint32_t *)(USART2_BASE + 0x4))
 
-    #define USART_BRR_DIV_Mantissa_Pos 4
-    #define USART_BRR_DIV_Fraction_Pos 0
+#define USART_BRR_DIV_Mantissa_Pos 4
+#define USART_BRR_DIV_Fraction_Pos 0
 
-    #define USART_CR1_RE (0x1 << 2)
-    #define USART_CR1_TE (0x1 << 3)
-    #define USART_CR1_UE (0x1 << 13)
+#define USART_CR1_RE (0x1 << 2)
+#define USART_CR1_TE (0x1 << 3)
+#define USART_CR1_UE (0x1 << 13)
+#define USART_CR1_TXEIE (0x1 << 7)
 
-    #define USART_SR_TXE (0x1 << 7)
-    #define USART_SR_RXNE (0x1 << 5)
-
+#define USART_SR_TXE (0x1 << 7)
+#define USART_SR_RXNE (0x1 << 5)
 
     class Uart
     {
@@ -32,14 +32,26 @@ namespace peripherals
         uint8_t _pinTx;
         uint8_t _pinRx;
         char rxb = '\0';
-    public:
+
+        void _putC(char c);
+        uint8_t _getC();
+        
+        public:
+        enum class Status : uint8_t
+        {
+            rx_available,
+            rx_empty
+        };
+        
         Uart(uint32_t baudrate, uint8_t pinTx, uint8_t pinRx);
         ~Uart();
         void sendByte(char b);
-        void receiveByte(char& b);
+        Status receiveByte(char &b);
+        
+        void write(const char* s);
+        bool read(char& c);
     };
 
 }
-
 
 #endif /* F548F8E1_5D9F_4C46_91DE_5C4205AD0530 */
